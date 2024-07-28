@@ -19,7 +19,7 @@ def bbr_parse_line(line):
         # script_content = line[2:].strip()
         # return f"<pre><code>{script_content}</code></pre>"  # Для показа скрипта в HTML формате
     if line.startswith('!<'):
-        return f"<title>{line[3:].strip()}</title>"
+        return f"<title>{line[2:].strip()}</title>"
     elif line.startswith('!_'):
         return f"<u>{line[2:].strip()}</u>"
     elif line.startswith('!!'):
@@ -77,14 +77,14 @@ def bbr_parse_text(text):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    [[TITLE]]
 </head>
 <body>
-    [[CONTENT]]
+[[CONTENT]]
 </body>
 </html>
     """
     
+    # print(htmltemplete.replace("[[CONTENT]]", parslines))
     return htmltemplete.replace("[[CONTENT]]", parslines)
     
 domain_url = "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/domains.json"
@@ -152,19 +152,21 @@ soup = BeautifulSoup(x_content, 'html.parser')
 body = soup.find('body')
 head = soup.find('head')
 
-
-if head:
-    title_tag = head.find('title')
-else:
-    if body:
-        title_tag = body.find('title')
-    else:
-        title_tag = None
+body_title = soup.body.find('title')
+if body_title:
+    if not soup.head:
+        soup.head = soup.new_tag('head')
+    soup.head.append(body_title.extract())
     
+# Теперь ищем тег <title> в <head>
+title_tag = soup.head.find('title') if soup.head else None
+
+# os.system("cls" if os.name == "nt" else "clear")
+
 if title_tag:
     print(f"{TextColor.CODE}{title_tag.text}{TextColor.ENDC} - BebraWEB")
 else:
-    print(f"{TextColor.CODE}Untitled{TextColor.ENDC} - BebraWEB\n")
+    print(f"{TextColor.STRONG}no title tag found{TextColor.ENDC} - BebraWEB\n")
 
 print(f"{TextColor.H5}{x_old}{TextColor.ENDC}\n\n")
 
