@@ -1,18 +1,14 @@
 @echo off
 echo "What do you want to do?"
 echo "1 = Remove file"
-echo "2"
+echo "2 = Build"
 set /p answer=
-if "%answer%"=="y" (
+if "%answer%"=="1" (
     del bbrweb.spec
-    echo "bbrweb.spec removed"
     rmdir dist /s /q
-    echo "dist removed"
     rmdir build /s /q
-    echo "build removed"
-    echo "=============================="
-    echo "Removed!"
 )
-
-python -m PyInstaller --noconfirm --onefile --console --name "bbrweb" "D:\Desktop\bbrweb\main.py"
+if "%answer%"=="2" (
+    python -m PyInstaller --noconfirm --onefile --console --name "bbrweb" "D:\Desktop\bbrweb\main.py"
+)
 pause

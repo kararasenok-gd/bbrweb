@@ -1,9 +1,9 @@
 {
-     "domains": [
-         {
-             "tld": "wtc",
-             "ip": "localhost",
-             "name": "findex"
-         }
-        ]
+    "domains": [
+        {
+            "tld": "wtc",
+            "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/findex/index.html",
+            "name": "findex"
+        }
+    ]
 }
