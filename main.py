@@ -53,7 +53,7 @@ def bbr_parse_line(line):
             
             return f'<{color}>{text}</{color}>'
     elif line.startswith('!'):
-        return line[1:].strip()
+        return f"<footer>{line[1:].strip()}</footer>"
     else:
         return line
 
@@ -63,11 +63,7 @@ def bbr_parse_text(text):
 
     for line in lines:
         if not line.startswith('!'):
-            continue  # Игнорирование комментариев
-        # if line.startswith('!>'):
-            # script_content = line[2:].strip()
-            # execute_script(script_content)  # Выполнение скрипта
-        # else:
+            continue
         parsed_lines.append(bbr_parse_line(line))
 
     parslines = '\n'.join(parsed_lines)
@@ -130,8 +126,7 @@ if x.endswith("/"):
     x = list(x)[:-1]
     x = "".join(x)
     
-if x_old == "bbr://":
-    print("Opening bbr://.home, because you didn't specify URL")
+if x_old == "bbr:///" or x_old == "bbr://" or x_old == "":
     x = ".home"
 
 found = False
