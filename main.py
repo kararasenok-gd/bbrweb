@@ -33,4 +33,4 @@ for i in cached_sites.get("domains"):
 if not found:
     print("Domain not found")
 
-print
+print(x_content)
