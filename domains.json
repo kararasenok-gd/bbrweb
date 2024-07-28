@@ -3,7 +3,7 @@
         {
             "tld": "wtc",
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/findex/index.html",
-            "tags": "default, page, index",
+            "tags": "default, page, index, findex",
             "name": "findex"
         },
         {
