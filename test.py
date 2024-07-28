@@ -40,14 +40,6 @@ def parse_text(text):
     return '\n'.join(parsed_lines)
 
 # Пример использования
-input_text = """
-! обычный
-!/ курсив
-!! жирный
-!_ подчёркнутый
-!> print("Hello from script!")
-!col>#0000ff>> цветной текст (синий)
-комментарий :3 (не отображается)
-"""
+input_text = open("silly/main.bbr", "r", encoding="utf-8").read()
 parsed_text = parse_text(input_text)
 print(parsed_text)
