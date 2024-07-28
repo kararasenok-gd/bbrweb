@@ -15,9 +15,11 @@ def execute_script(code):
     exec(code, globals())
 
 def bbr_parse_line(line):
-    if line.startswith('!>'):
-        script_content = line[2:].strip()
-        return f"<pre><code>{script_content}</code></pre>"  # Для показа скрипта в HTML формате
+    # if line.startswith('!>'):
+        # script_content = line[2:].strip()
+        # return f"<pre><code>{script_content}</code></pre>"  # Для показа скрипта в HTML формате
+    if line.startswith('!<'):
+        return f"<title>{line[3:].strip()}</title>"
     elif line.startswith('!_'):
         return f"<u>{line[2:].strip()}</u>"
     elif line.startswith('!!'):
@@ -68,7 +70,23 @@ def bbr_parse_text(text):
         else:
             parsed_lines.append(bbr_parse_line(line))
 
-    return '\n'.join(parsed_lines)
+    parslines = '\n'.join(parsed_lines)
+    htmltemplete = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    [[TITLE]]
+</head>
+<body>
+    [[CONTENT]]
+</body>
+</html>
+    """
+    
+    return htmltemplete.replace("[[CONTENT]]", parslines)
+    
 domain_url = "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/domains.json"
 cached_sites = requests.get(domain_url).json()
 # cached_sites = json.loads(open("domains.json", "r").read())
@@ -108,8 +126,9 @@ else:
 print(f"Opening '{x}'...")
 x_old = x
 x = x.replace("bbr://", "")
-x = list(x)[:-1]
-x = "".join(x)
+if x.endswith("/"):
+    x = list(x)[:-1]
+    x = "".join(x)
 
 found = False
 
@@ -134,7 +153,14 @@ body = soup.find('body')
 head = soup.find('head')
 
 
-title_tag = head.find('title')
+if head:
+    title_tag = head.find('title')
+else:
+    if body:
+        title_tag = body.find('title')
+    else:
+        title_tag = None
+    
 if title_tag:
     print(f"{TextColor.CODE}{title_tag.text}{TextColor.ENDC} - BebraWEB")
 else:
