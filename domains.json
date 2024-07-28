@@ -23,6 +23,12 @@
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/ascii/index.html",
             "tags": "ascii, page",
             "name": "index"
+        },
+        {
+            "tld":"uwu",
+            "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/tags/index.html",
+            "tags": "test, tags",
+            "name": "tags"
         }
     ]
 }
