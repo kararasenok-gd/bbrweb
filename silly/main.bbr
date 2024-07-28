@@ -3,5 +3,5 @@
 !! жирный
 !_ подчёркнутый
 !> print("Hello! This is Python Script inside BebraLang")
-!col>>> цветной текст (синий)
+!col>blue>> цветной текст (синий)
 комментарий :3
