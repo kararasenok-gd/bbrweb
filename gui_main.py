@@ -3,8 +3,9 @@ import requests, json
 from bs4 import BeautifulSoup
 
 layout = [
-    [sg.Input(size=(30, 1), default_text="findex.wtc"), sg.Button("Go")],
+    [sg.Input(size=(30, 1), default_text="findex.wtc", key="INPUT"), sg.Button("Go")],
     [sg.Text(key="--OUTPUT--")],
+    [sg.Text(key="--LINKS--", font=("Arial", 10, "underline"))],
 ]
 
 domain_url = "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/domains.json"
@@ -41,7 +42,7 @@ while True:
         found = False
 
         for i in cached_sites.get("domains"):
-            if i["name"] + "." + i["tld"] == values[0]:
+            if i["name"] + "." + i["tld"] == values["INPUT"]:
                 found = True
                 x_url = i["ip"]
                 x_content = requests.get(x_url).text
@@ -81,9 +82,9 @@ while True:
             tag_name = tag.name
             # color = color_mapping.get(tag_name, TextColor.ENDC)
             if tag_name == "a" and tag.get("href"):
-                if event == "a":
-                    window["INPUT"].Update(tag.get("href"))
-            output_text += str(tag) + '\n'
+                window["--LINKS--"].update(tag.get("href") + ", ")
+            else:
+                output_text += str(tag.text) + '\n'
 
         window["--OUTPUT--"].update(output_text)
 
