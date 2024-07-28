@@ -7,8 +7,9 @@ parser.add_argument("--url", help="URL to the site in BebraWEB", type=str)
 args = parser.parse_args()
 
 
-domain_url = "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/domains.json"
-cached_sites = requests.get(domain_url).json()
+# domain_url = "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/domains.json"
+# cached_sites = requests.get(domain_url).json()
+cached_sites = json.loads(open("domains.json", "r").read())
 
 class TextColor:
     H1 = '\u001b[95m'
