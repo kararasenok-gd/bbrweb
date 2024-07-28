@@ -1,0 +1,9 @@
+{
+     "domains": [
+         {
+             "tld": "wtc",
+             "ip": "localhost",
+             "name": "findex"
+         }
+        ]
+}
