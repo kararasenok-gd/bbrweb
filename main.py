@@ -69,6 +69,9 @@ def bbr_parse_text(text):
             parsed_lines.append(bbr_parse_line(line))
 
     return '\n'.join(parsed_lines)
+domain_url = "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/domains.json"
+cached_sites = requests.get(domain_url).json()
+# cached_sites = json.loads(open("domains.json", "r").read())
 
 class TextColor:
     H1 = '\u001b[95m'
