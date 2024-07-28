@@ -43,7 +43,7 @@ if args.url:
 else:
     x = input("URL: ")
 
-print(f"Opening '{x}'...")
+# print(f"Opening '{x}'...")
 x = x.replace("bbr://", "").replace("/", "")
 
 found = False
@@ -93,4 +93,4 @@ for tag in body.find_all():
     
     
     
-input("Press Enter to exit...")
+# input("Press Enter to exit...")

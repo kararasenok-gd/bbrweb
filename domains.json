@@ -3,12 +3,18 @@
         {
             "tld": "wtc",
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/findex/index.html",
+            "tags": "default, page, index",
             "name": "findex"
         },
         {
             "tld": "uwu",
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/silly/index.html",
             "name": "silly"
+        },
+        {
+            "tld": "uwu",
+            "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/silly/rnk.html",
+            "name": "роскомнадзор"
         }
     ]
 }
