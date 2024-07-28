@@ -29,7 +29,7 @@ def parse_text(text):
     parsed_lines = []
 
     for line in lines:
-        if line.strip().startswith('комментарий'):
+        if not line.startswith('!'):
             continue  # Игнорирование комментариев
         if line.startswith('!>'):
             script_content = line[2:].strip()

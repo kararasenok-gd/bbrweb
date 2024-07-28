@@ -17,6 +17,12 @@
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/silly/rkn.html",
             "tags": "rkn, page",
             "name": "rkn"
+        },
+        {
+            "tld": "ascii",
+            "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/ascii/index.html",
+            "tags": "ascii, page",
+            "name": "index"
         }
     ]
 }
