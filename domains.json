@@ -29,6 +29,12 @@
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/tags/index.html",
             "tags": "test, tags",
             "name": "tags"
+        },
+        {
+            "tld":"home",
+            "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/home/index.bbr",
+            "tags": "home, page, index",
+            "name": ""
         }
     ]
 }

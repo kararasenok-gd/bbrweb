@@ -64,11 +64,11 @@ def bbr_parse_text(text):
     for line in lines:
         if not line.startswith('!'):
             continue  # Игнорирование комментариев
-        if line.startswith('!>'):
-            script_content = line[2:].strip()
-            execute_script(script_content)  # Выполнение скрипта
-        else:
-            parsed_lines.append(bbr_parse_line(line))
+        # if line.startswith('!>'):
+            # script_content = line[2:].strip()
+            # execute_script(script_content)  # Выполнение скрипта
+        # else:
+        parsed_lines.append(bbr_parse_line(line))
 
     parslines = '\n'.join(parsed_lines)
     htmltemplete = """
@@ -129,6 +129,10 @@ x = x.replace("bbr://", "")
 if x.endswith("/"):
     x = list(x)[:-1]
     x = "".join(x)
+    
+if x_old == "bbr://":
+    print("Opening bbr://.home, because you didn't specify URL")
+    x = ".home"
 
 found = False
 
@@ -166,7 +170,7 @@ title_tag = soup.head.find('title') if soup.head else None
 if title_tag:
     print(f"{TextColor.CODE}{title_tag.text}{TextColor.ENDC} - BebraWEB")
 else:
-    print(f"{TextColor.STRONG}no title tag found{TextColor.ENDC} - BebraWEB\n")
+    print(f"{TextColor.STRONG}ERR: No Title Tag Found{TextColor.ENDC} - BebraWEB\n")
 
 print(f"{TextColor.H5}{x_old}{TextColor.ENDC}\n\n")
 
