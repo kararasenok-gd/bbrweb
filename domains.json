@@ -9,11 +9,13 @@
         {
             "tld": "uwu",
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/silly/index.html",
+            "tags": "silly, uwu, page",
             "name": "silly"
         },
         {
             "tld": "uwu",
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/silly/rkn.html",
+            "tags": "rkn, page",
             "name": "rkn"
         }
     ]
