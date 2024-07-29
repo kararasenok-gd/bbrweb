@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 def create_layout():
     return [
         [sg.Input(size=(30, 1), default_text="findex.wtc", key="INPUT"), sg.Button("Go")],
-        [sg.Column([], key="--OUTPUT--", scrollable=True, vertical_scroll_only=True, size=(500, 400))],
+        [sg.Column([], key="--OUTPUT--", scrollable=True, vertical_scroll_only=True, size=(400, 500))],
         [sg.Text("", key="--LINKS--", font=("Arial", 15, "underline"))],
     ]
 
@@ -162,7 +162,7 @@ while True:
         }
 
         output_elements = []
-        links = ""
+        links = []
         title = soup.find('title').text + " - BBRWEB" if soup.find('title') else values["INPUT"] + " - BBRWEB"
         window.TKroot.title(title)
 
@@ -170,11 +170,12 @@ while True:
             tag_name = tag.name
             color = color_mapping.get(str(tag_name))
             if tag_name == "a" and tag.get("href"):
-                def on_click(event, values, url=tag.get("href")):
-                    window["INPUT"].update(url)
-                    window.write_event_value("Go", None)
-                output_elements.append([sg.Text(tag.text, text_color=color, font=("Arial", 15, "underline"), enable_events=True, key=str(tag.get("href")).split(".")[0])])
-                window[str(tag.get("href")).split(".")[0]].bind("<Button-1>", "+CLICK+")
+                # def on_click(event, values, url=tag.get("href")):
+                #     window["INPUT"].update(url)
+                #     window.write_event_value("Go", None)
+                # output_elements.append([sg.Text(tag.text, text_color=color, font=("Arial", 15, "underline"), enable_events=True, key=str(tag.get("href")).split(".")[0])])
+                # window[str(tag.get("href")).split(".")[0]].bind("<Button-1>", "+CLICK+")
+                links.append(str(tag.get("href")) + ", ")
             else:
                 output_elements.append([sg.Text(tag.text, text_color=color)])
 
@@ -182,7 +183,7 @@ while True:
         window.close()
         window = sg.Window(title="BebraWEB", layout=create_layout(), finalize=True)
         update_window_with_content(output_elements)
-        window["--LINKS--"].update(links[:-2])
+        window["--LINKS--"].update(links)
 
     for key in window.key_dict:
         if key.endswith("+CLICK+"):
