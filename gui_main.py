@@ -1,41 +1,121 @@
 import PySimpleGUI as sg
-import requests, json
+import requests
+import re
 from bs4 import BeautifulSoup
 
-layout = [
-    [sg.Input(size=(30, 1), default_text="findex.wtc", key="INPUT"), sg.Button("Go")],
-    [sg.Text(key="--OUTPUT--")],
-    [sg.Text(key="--LINKS--", font=("Arial", 15, "underline"))],
-]
+def create_layout():
+    return [
+        [sg.Input(size=(30, 1), default_text="findex.wtc", key="INPUT"), sg.Button("Go")],
+        [sg.Column([], key="--OUTPUT--", scrollable=True, vertical_scroll_only=True, size=(500, 400))],
+        [sg.Text("", key="--LINKS--", font=("Arial", 15, "underline"))],
+    ]
+
+layout = create_layout()
+
+def execute_script(code):
+    exec(code, globals())
+
+def bbr_parse_line(line):
+    if line.startswith('!<'):
+        return f"<title>{line[2:].strip()}</title>"
+    elif line.startswith('!_'):
+        return f"<u>{line[2:].strip()}</u>"
+    elif line.startswith('!!'):
+        return f"<b>{line[2:].strip()}</b>"
+    elif line.startswith('!/'):
+        return f"<i>{line[2:].strip()}</i>"
+    elif line.startswith('!col>'):
+        match = re.match(r'!col>(.*)>>\s*(.*)', line)
+        if match:
+            color = match.group(1).strip()
+            text = match.group(2).strip()
+            
+            if color == "purple":
+                color = "h1"
+            elif color == "blue":
+                color = "h2"
+            elif color == "cyan":
+                color = "h3"
+            elif color == "green":
+                color = "h4"
+            elif color == "orange":
+                color = "h5"
+            elif color == "red":
+                color = "h6"
+            elif color == "gray":
+                color = "p"
+            elif color == "white":
+                color = "a"
+            else:
+                color = "footer"
+            
+            return f'<{color}>{text}</{color}>'
+    elif line.startswith('!'):
+        return f"<footer>{line[1:].strip()}</footer>"
+    else:
+        return line
+
+def bbr_parse_text(text):
+    lines = text.split('\n')
+    parsed_lines = []
+
+    for line in lines:
+        if not line.startswith('!'):
+            continue
+        
+        parsed_line = bbr_parse_line(line)
+        parsed_lines.append(parsed_line)
+
+    parslines = '\n'.join(parsed_lines)
+    htmltemplete = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+[[CONTENT]]
+</body>
+</html>
+    """
+    
+    parsed_html = htmltemplete.replace("[[CONTENT]]", parslines)
+    
+    return parsed_html
 
 domain_url = "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/domains.json"
 cached_sites = requests.get(domain_url).json()
 
 class TextColor:
-    H1 = '\033[95m'
-    H2 = '\033[94m'
-    H3 = '\033[96m'
-    H4 = '\033[92m'
-    H5 = '\033[93m'
-    H6 = '\033[91m'
-    P = '\033[0m'
-    A = '\033[0m'
-    SPAN = '\033[0m'
-    STRONG = '\033[0m'
-    EM = '\033[0m'
-    B = '\033[0m'
-    I = '\033[0m'
-    U = '\033[0m'
-    SMALL = '\033[0m'
-    BLOCKQUOTE = '\033[0m'
-    PRE = '\033[0m'
-    CODE = '\033[0m'
-    ENDC = '\033[0m'
+    H1 = '#d670d6'
+    H2 = '#3b8de8'
+    H3 = '#27afd0'
+    H4 = '#24d18b'
+    H5 = '#eeee42'
+    H6 = '#f04c4c'
+    P = '#808080'
+    A = '#e2e2e2'
+    SPAN = '#808080'
+    STRONG = '#ee4b4b'
+    EM = '#28aaca'
+    B = '#22be7f'
+    I = '#e6e640'
+    U = '#d56fd5'
+    SMALL = '#7a7a7a'
+    BLOCKQUOTE = '#27b0d1'
+    PRE = '#e2e2e2'
+    CODE = '#e2e2e2'
+    ENDC = '#909090'
 
-window = sg.Window(title="BebraWEB", layout=layout)
+window = sg.Window(title="BebraWEB", layout=layout, finalize=True)
+
+def update_window_with_content(content):
+    window.extend_layout(window["--OUTPUT--"], content)
+    window["--OUTPUT--"].contents_changed()
 
 while True:
-    event, values = window.Read()
+    event, values = window.read()
     if event == sg.WINDOW_CLOSED or event == "Exit":
         break
     if event == "Go":
@@ -46,13 +126,15 @@ while True:
                 found = True
                 x_url = i["ip"]
                 x_content = requests.get(x_url).text
+                if x_url.endswith(".bbr"):
+                    x_content = bbr_parse_text(x_content)
                 window["--LINKS--"].update("")
                 break
-            
+
         if not found:
             # Change text in output
             window["--OUTPUT--"].update("Domain not found")
-            quit()
+            continue
 
         soup = BeautifulSoup(x_content, 'html.parser')
         body = soup.find('body')
@@ -76,19 +158,37 @@ while True:
             'blockquote': TextColor.BLOCKQUOTE,
             'pre': TextColor.PRE,
             'code': TextColor.CODE,
+            'footer': TextColor.ENDC
         }
 
-        output_text = ""
+        output_elements = []
         links = ""
+        title = soup.find('title').text + " - BBRWEB" if soup.find('title') else values["INPUT"] + " - BBRWEB"
+        window.TKroot.title(title)
+
         for tag in body.find_all():
             tag_name = tag.name
-            # color = color_mapping.get(tag_name, TextColor.ENDC)
+            color = color_mapping.get(str(tag_name))
             if tag_name == "a" and tag.get("href"):
-                links += tag.get("href") + ', '
+                def on_click(event, values, url=tag.get("href")):
+                    window["INPUT"].update(url)
+                    window.write_event_value("Go", None)
+                output_elements.append([sg.Text(tag.text, text_color=color, font=("Arial", 15, "underline"), enable_events=True, key=str(tag.get("href")).split(".")[0])])
+                window[str(tag.get("href")).split(".")[0]].bind("<Button-1>", "+CLICK+")
             else:
-                output_text += str(tag.text) + '\n'
+                output_elements.append([sg.Text(tag.text, text_color=color)])
 
-        window["--OUTPUT--"].update(output_text)
+        # Clear the entire layout
+        window.close()
+        window = sg.Window(title="BebraWEB", layout=create_layout(), finalize=True)
+        update_window_with_content(output_elements)
         window["--LINKS--"].update(links[:-2])
 
-window.Close()
+    for key in window.key_dict:
+        if key.endswith("+CLICK+"):
+            if event == key:
+                link = key.split("+")[0]
+                window["INPUT"].update(link)
+                window.write_event_value("Go", None)
+
+window.close()
