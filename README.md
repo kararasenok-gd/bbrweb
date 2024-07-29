@@ -8,7 +8,7 @@ WRITE ABOUT ALL ERRORS IN DISCORD (`kararasenok_gd`) OR IN ISSUES TAB
 
 # BebraWEB
 
- <img src="https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/bbrweb.png" style="width: 16px"> bbrweb - strange web engine with its own protocol (bbr://) and "browser"
+ <img src="https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/bbrweb.png" style="width: 32px"> bbrweb - strange web engine with its own protocol (bbr://) and "browser"
 
 ## Authors
 
