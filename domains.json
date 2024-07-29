@@ -35,6 +35,12 @@
             "ip": "https://raw.githubusercontent.com/kararasenok-gd/bbrweb/main/home/index.bbr",
             "tags": "home, page, index",
             "name": ""
+        },
+        {
+            "tld": "cheese",
+            "ip": "https://raw.githubusercontent.com/KailUser/bbrweb_mysite/main/index.html",
+            "tags": "syirezz, cheese, about, page, cyrix",
+            "name": "syirezz"
         }
     ]
 }
