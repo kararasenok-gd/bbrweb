@@ -195,6 +195,9 @@ for tag in body.find_all():
     tag_name = tag.name
     color = color_mapping.get(tag_name, TextColor.ENDC)
 
-    print(color, tag.text, TextColor.ENDC)
+    if tag_name == 'a':
+        print(color, tag.text, " - ", tag.get('href'), TextColor.ENDC)
+    else:
+        print(color, tag.text, TextColor.ENDC)
     
 input("Press Enter to exit...")

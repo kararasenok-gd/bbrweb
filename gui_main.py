@@ -94,7 +94,7 @@ class TextColor:
     H4 = '#24d18b'
     H5 = '#eeee42'
     H6 = '#f04c4c'
-    P = '#808080'
+    P = '#809090'
     A = '#e2e2e2'
     SPAN = '#808080'
     STRONG = '#ee4b4b'
@@ -168,14 +168,9 @@ while True:
 
         for tag in body.find_all():
             tag_name = tag.name
-            color = color_mapping.get(str(tag_name))
+            color = color_mapping.get(str(tag_name), TextColor.ENDC)
             if tag_name == "a" and tag.get("href"):
-                # def on_click(event, values, url=tag.get("href")):
-                #     window["INPUT"].update(url)
-                #     window.write_event_value("Go", None)
-                # output_elements.append([sg.Text(tag.text, text_color=color, font=("Arial", 15, "underline"), enable_events=True, key=str(tag.get("href")).split(".")[0])])
-                # window[str(tag.get("href")).split(".")[0]].bind("<Button-1>", "+CLICK+")
-                links.append(str(tag.get("href")) + ", ")
+                output_elements.append([sg.Text(f"{tag.text} - {tag.get('href')}", text_color=color)])
             else:
                 output_elements.append([sg.Text(tag.text, text_color=color)])
 
